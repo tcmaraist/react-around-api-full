@@ -1,0 +1,9 @@
+.login-form__input {
+  margin-top: 30px;
+  background: transparent;
+  border-top-style: hidden;
+  border-right-style: hidden;
+  border-bottom: 2px solid #cccccc;
+  border-left-style: hidden;
+  color: #ffffff;
+}

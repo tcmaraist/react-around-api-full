@@ -1,0 +1,9 @@
+.login-form__text {
+  margin: 0;
+  text-align: center;
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  color: #fff;
+}

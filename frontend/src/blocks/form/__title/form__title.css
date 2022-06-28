@@ -1,0 +1,12 @@
+.form__title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 900;
+    line-height: 1.2;
+}
+
+@media screen and (min-width: 550px) {
+    .modal__title {
+        font-size: 24px;
+    }
+}

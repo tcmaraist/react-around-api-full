@@ -1,0 +1,27 @@
+.profile {
+    margin: 0 auto;
+    padding: 38.25px 10px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@media screen and (min-width: 550px){
+    .profile {
+        max-width: 500px;
+    }
+}
+
+@media screen and (min-width: 920px){
+    .profile {
+        padding: 36.25px 0 0;
+        max-width: 880px;
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        column-gap: 30px;
+    }
+}

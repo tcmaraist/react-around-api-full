@@ -1,0 +1,17 @@
+.profile__info-group {
+    margin: 0 auto;
+    padding: 26px 0 0;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+@media screen and (min-width: 920px) {
+    .profile__info-group {
+        margin: 0;
+        padding: 0;
+        justify-content: flex-start;
+    }
+}
