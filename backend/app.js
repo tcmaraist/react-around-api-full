@@ -14,9 +14,4 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(routes);
 
-app.use((req, res, next) => {
-  req.user = { _id: '628ac63841ee89b69a0a6d68' };
-  next();
-});
-
 app.listen(PORT, () => console.log('ok'));
