@@ -1,9 +1,0 @@
-.modal__body_type_preview {
-  max-width: 75vw;
-  max-height: 75vh;
-  height: auto;
-  width: auto;
-  background-color: transparent;
-  padding: 0;
-  z-index: 5;
-}
