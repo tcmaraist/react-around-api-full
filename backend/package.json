@@ -17,7 +17,7 @@
   "bugs": {
     "url": "https://github.com/tcmaraist/around-express/issues"
   },
-  "homepage": "https://github.com/tcmaraist/around-express#readme",
+  "homepage": "http://www.ty-around.students.nomoreparties.sbs",
   "devDependencies": {
     "eslint": "^8.14.0",
     "eslint-config-airbnb-base": "^15.0.0",
