@@ -35,13 +35,8 @@ class Auth {
   }
 }
 
-const BASE_URL =
-  process.env.NODE_ENV === "production"
-    ? ""
-    : "http://www.ty-around.students.nomoreparties.sbs";
-
 const auth = new Auth({
-  baseUrl: BASE_URL,
+  baseUrl: "https://register.nomoreparties.co",
   headers: {
     "Content-Type": "application/json",
   },

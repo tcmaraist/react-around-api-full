@@ -8,26 +8,20 @@ class Api {
     return res.ok ? res.json() : Promise.reject(`Error: ${res.status}`);
   }
 
-  getAppInfo(token) {
-    return Promise.all([this.getInitialCards(token), this.getUserInfo(token)]);
+  getAppInfo() {
+    return Promise.all([this.getInitialCards(), this.getUserInfo()]);
   }
 
-  getUserInfo(token) {
+  getUserInfo() {
     return fetch(`${this._baseUrl}/users/me`, {
-      headers: {
-        authorization: `Bearer ${token}`,
-        ...this._headers,
-      },
+      headers: this._headers,
     }).then(this._handleServerResponse);
   }
 
-  setUserInfo({ name, about }, token) {
+  setUserInfo({ name, about }) {
     return fetch(`${this._baseUrl}/users/me`, {
       method: "PATCH",
-      headers: {
-        authorization: `Bearer ${token}`,
-        ...this._headers,
-      },
+      headers: this._headers,
       body: JSON.stringify({
         name,
         about,
@@ -35,35 +29,26 @@ class Api {
     }).then(this._handleServerResponse);
   }
 
-  updateProfilePicture({ avatar }, token) {
+  updateProfilePicture({ avatar }) {
     return fetch(`${this._baseUrl}/users/me/avatar`, {
       method: "PATCH",
-      headers: {
-        authorization: `Bearer ${token}`,
-        ...this._headers,
-      },
+      headers: this._headers,
       body: JSON.stringify({
         avatar,
       }),
     }).then(this._handleServerResponse);
   }
 
-  getInitialCards(token) {
+  getInitialCards() {
     return fetch(`${this._baseUrl}/cards`, {
-      headers: {
-        authorization: `Bearer ${token}`,
-        ...this._headers,
-      },
+      headers: this._headers,
     }).then(this._handleServerResponse);
   }
 
-  addCard({ name, link }, token) {
+  addCard({ name, link }) {
     return fetch(`${this._baseUrl}/cards`, {
       method: "POST",
-      headers: {
-        authorization: `Bearer ${token}`,
-        ...this._headers,
-      },
+      headers: this._headers,
       body: JSON.stringify({
         name,
         link,
@@ -71,55 +56,39 @@ class Api {
     }).then(this._handleServerResponse);
   }
 
-  removeCard(cardID, token) {
+  removeCard(cardID) {
     return fetch(`${this._baseUrl}/cards/${cardID}`, {
       method: "DELETE",
-      headers: {
-        authorization: `Bearer ${token}`,
-        ...this._headers,
-      },
+      headers: this._headers,
     }).then(this._handleServerResponse);
   }
 
-  toggleLike(cardId, like, token) {
+  toggleLike(cardId, like) {
     return fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
       method: like ? "PUT" : "DELETE",
-      headers: {
-        authorization: `Bearer ${token}`,
-        ...this._headers,
-      },
+      headers: this._headers,
     }).then(this._handleServerResponse);
   }
 
-  addLike(cardId, token) {
+  addLike(cardId) {
     return fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
       method: "PUT",
-      headers: {
-        authorization: `Bearer ${token}`,
-        ...this._headers,
-      },
+      headers: this._headers,
     }).then(this._handleServerResponse);
   }
 
-  removeLike(cardId, token) {
+  removeLike(cardId) {
     return fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
       method: "DELETE",
-      headers: {
-        authorization: `Bearer ${token}`,
-        ...this._headers,
-      },
+      headers: this._headers,
     }).then(this._handleServerResponse);
   }
 }
 
-const BASE_URL =
-  process.env.NODE_ENV === "production"
-    ? ""
-    : "http://www.ty-around.students.nomoreparties.sbs";
-
 const api = new Api({
-  baseUrl: BASE_URL,
+  baseUrl: "https://around.nomoreparties.co/v1/group-12",
   headers: {
+    authorization: "4921d172-e47d-477d-bceb-cfdae220d52e",
     "Content-Type": "application/json",
   },
 });

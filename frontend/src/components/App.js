@@ -36,17 +36,14 @@ function App() {
   const history = useHistory();
 
   React.useEffect(() => {
-    const token = localStorage.getItem("jwt");
-    if (token && isLoggedIn) {
-      api
-        .getAppInfo(token)
-        .then(([cardData, userData]) => {
-          setCurrentUser(userData);
-          setCards(cardData);
-        })
-        .catch((err) => console.error(err));
-    }
-  }, [isLoggedIn]);
+    api
+      .getAppInfo()
+      .then(([cardData, userData]) => {
+        setCurrentUser(userData);
+        setCards(cardData);
+      })
+      .catch((err) => console.error(err));
+  }, []);
 
   React.useEffect(() => {
     const token = localStorage.getItem("jwt");
