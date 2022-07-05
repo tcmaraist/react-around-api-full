@@ -1,14 +1,18 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const BadRequestError = require('../errors/bad-request-error');
+const ConflictError = require('../errors/conflict-error');
+const NotFoundError = require('../errors/not-found-error');
+const UnauthorizedError = require('../errors/unauthorized-error');
 const User = require('../models/user');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
-const getUsers = (req, res) => {
+const getUsers = (req, res, next) => {
   User.find({})
     .orFail()
     .then((users) => res.status(200).send({ data: users }))
-    .catch(() => res.status(500).send({ message: 'An error has occurred on the server' }));
+    .catch(next);
 };
 
 const getCurrentUser = (req, res, next) => {
@@ -18,7 +22,7 @@ const getCurrentUser = (req, res, next) => {
     .catch(next);
 };
 
-const getUserById = (req, res) => {
+const getUserById = (req, res, next) => {
   const { userId } = req.params;
 
   User.findById(userId)
@@ -26,12 +30,11 @@ const getUserById = (req, res) => {
     .then((users) => users.find((user) => user._id === req.params.id))
     .then((user) => {
       if (!user) {
-        res.status(404).send({ message: 'User ID not found' });
-        return;
+        next(new NotFoundError('User ID not found'));
       }
       res.status(200).send(user);
     })
-    .catch(() => res.status(500).send({ message: 'An error has occurred on the server' }));
+    .catch(next);
 };
 
 const createUser = (req, res, next) => {
@@ -42,9 +45,9 @@ const createUser = (req, res, next) => {
   User.findOne({ email })
     .then((user) => {
       if (user) {
-        return res.status(409).send({
-          message: 'The user with the provided email address already exists',
-        });
+        next(
+          new ConflictError('A user with this email address already exists'),
+        );
       }
       return bcrypt.hash(password, 10);
     })
@@ -58,14 +61,14 @@ const createUser = (req, res, next) => {
     .then((data) => res.status(201).send({ data }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400).send({ message: 'Invalid email or password' });
+        next(new BadRequestError('Invalid email or password'));
       } else {
         next(err);
       }
     });
 };
 
-const updateUserInfo = (req, res) => {
+const updateUserInfo = (req, res, next) => {
   const currentUser = req.user._id;
   const { name, about } = req.body;
 
@@ -78,24 +81,18 @@ const updateUserInfo = (req, res) => {
     .then((user) => res.status(200).send({ data: user }))
     .catch((err) => {
       if (err.name === 'DocumentNotFoundError') {
-        res.status(400).send({ message: 'User not found' });
+        next(new NotFoundError('User ID not found'));
       } else if (err.name === 'ValidationError') {
-        res.status(400).send({
-          message: `${Object.values(err.errors)
-            .map((error) => error.message)
-            .join(', ')}`,
-        });
+        next(new BadRequestError('Invalid User ID'));
       } else if (err.name === 'CastError') {
-        res.status().send({ message: 'Invalid User ID passed for update' });
+        next(new BadRequestError('Invalid User ID'));
       } else {
-        res
-          .status(500)
-          .send({ message: 'An error has occurred on the server' });
+        next(err);
       }
     });
 };
 
-const updateUserAvatar = (req, res) => {
+const updateUserAvatar = (req, res, next) => {
   const currentUser = req.user._id;
   const { avatar } = req.body;
 
@@ -108,24 +105,18 @@ const updateUserAvatar = (req, res) => {
     .then((user) => res.status(200).send({ data: user }))
     .catch((err) => {
       if (err.name === 'DocumentNotFoundError') {
-        res.status(400).send({ message: 'User not found' });
+        next(new NotFoundError('User ID not found'));
       } else if (err.name === 'ValidationError') {
-        res.status(400).send({
-          message: `${Object.values(err.errors)
-            .map((error) => error.message)
-            .join(', ')}`,
-        });
+        next(new BadRequestError('Invalid link'));
       } else if (err.name === 'CastError') {
-        res.status().send({ message: 'Invalid avatar link passed for update' });
+        next(new BadRequestError('Invalid User ID'));
       } else {
-        res
-          .status(500)
-          .send({ message: 'An error has occurred on the server' });
+        next(err);
       }
     });
 };
 
-const login = (req, res) => {
+const login = (req, res, next) => {
   const { email, password } = req.body;
   return User.findUserByCredentials(email, password)
     .then((user) => {
@@ -139,7 +130,7 @@ const login = (req, res) => {
       res.send({ data: user.toJSON(), token });
     })
     .catch(() => {
-      res.status(401).send({ message: 'Incorrect email or password' });
+      next(new UnauthorizedError('Authorization error'));
     });
 };
 module.exports = {

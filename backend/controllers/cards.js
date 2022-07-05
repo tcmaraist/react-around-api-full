@@ -1,3 +1,6 @@
+const BadRequestError = require('../errors/bad-request-error');
+const ForbiddenError = require('../errors/forbidden-error');
+const NotFoundError = require('../errors/not-found-error');
 const Card = require('../models/card');
 
 const getCards = (req, res) => {
@@ -6,7 +9,7 @@ const getCards = (req, res) => {
     .catch(() => res.status(500).send({ message: 'An error occurred' }));
 };
 
-const createCard = (req, res) => {
+const createCard = (req, res, next) => {
   console.log(req.user._id);
   const { name, link } = req.body;
   const owner = req.user._id;
@@ -14,42 +17,30 @@ const createCard = (req, res) => {
     .then((card) => res.status(201).send(card))
     .catch((err) => {
       if (err.name === 'ValidatorError') {
-        res.status(400).send({
-          message: `${Object.values(err.errors)
-            .map((error) => error.message)
-            .join(', ')}`,
-        });
+        next(new BadRequestError('Invalid name or link'));
       } else {
-        res
-          .status(500)
-          .send({ message: 'An error has occurred on the server' });
+        next(err);
       }
     });
 };
 
-const deleteCard = (req, res) => {
+const deleteCard = (req, res, next) => {
   const { cardId } = req.params;
-  Card.findByID(cardId)
-    .orFail(() => {
-      const error = new Error('No card found for the specified id');
-      error.statusCode = 404;
-      throw error;
-    })
-    .then((card) => Card.deleteOne(card).then(() => res.send({ data: card })))
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        res.status(400).send({ message: 'Invalid cardId' });
-      } else if (err.statusCode === 404) {
-        res.status(404).send({ message: err.message });
-      } else {
-        res
-          .status(500)
-          .send({ message: 'An error has occurred on the server' });
+  Card.findById({ _id: cardId })
+    .orFail(() => new NotFoundError('Card ID not found'))
+    .then((card) => {
+      if (!(card.owner.toString() === req.user._id)) {
+        next(new ForbiddenError('You do not have permission to delete'));
       }
-    });
+      Card.findByIdAndRemove({ _id: cardId })
+        .orFail(new NotFoundError('Card ID not found'))
+        .then(() => res.status(201).send(card))
+        .catch(next);
+    })
+    .catch(next);
 };
 
-const likeCard = (req, res) => {
+const likeCard = (req, res, next) => {
   const currentUser = req.user._id;
   const { cardId } = req.params;
 
@@ -62,20 +53,16 @@ const likeCard = (req, res) => {
     .then((card) => res.status(200).send({ data: card }))
     .catch((err) => {
       if (err.name === 'DocumentNotFoundError') {
-        res.status(404).send({ message: ' Card not found' });
+        next(new NotFoundError('Card ID not found'));
       } else if (err.name === 'CastError') {
-        res.status(400).send({
-          message: 'Invalid Card ID passed for liking a card',
-        });
+        next(new BadRequestError('Invalid Card ID'));
       } else {
-        res.status(500).send({
-          message: ' An error has occurred on the server',
-        });
+        next(err);
       }
     });
 };
 
-const dislikeCard = (req, res) => {
+const dislikeCard = (req, res, next) => {
   const currentUser = req.user._id;
   const { cardId } = req.params;
 
@@ -88,15 +75,11 @@ const dislikeCard = (req, res) => {
     .then((card) => res.status(200).send({ data: card }))
     .catch((err) => {
       if (err.name === 'DocumentNotFoundError') {
-        res.status(404).send({ message: 'Card not found' });
+        next(new NotFoundError('Card ID not found'));
       } else if (err.name === 'CastError') {
-        res.status(400).send({
-          message: 'Invalid Card ID passed for disliking a card',
-        });
+        next(new BadRequestError('Invalid Card ID'));
       } else {
-        res.status(500).send({
-          message: 'An error has occurred on the server',
-        });
+        next(err);
       }
     });
 };
