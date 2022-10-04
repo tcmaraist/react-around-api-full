@@ -2,7 +2,7 @@
   "name": "around-react",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://ty-around.students.nomoredomainssbs.ru",
+  "homepage": "https://ty-around-the-us.students.nomoredomainssbs.ru",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.3",
@@ -19,7 +19,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "npm run build && scp -r ./build/* tcmaraist@ty-around.students.nomoredomainssbs.ru:/home/tcmaraist/react-around-api-full/frontend"
+    "deploy": "npm run build && scp -r ./build/* tcmaraist@ty-around-the-us.students.nomoredomainssbs.ru:/home/tcmaraist/react-around-api-full/frontend"
   },
   "eslintConfig": {
     "extends": [
