@@ -1,4 +1,17 @@
 .header__auth-wrapper {
+  margin: 0 auto;
+
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  text-align: center;
+}
+
+@media screen and (min-width: 880px) {
+  .header__auth-wrapper {
+    margin: 0;
+    flex-direction: row;
+    justify-content: space-between;
+  }
 }

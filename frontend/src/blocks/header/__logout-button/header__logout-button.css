@@ -1,10 +1,11 @@
 .header__logout-button {
+  margin: auto;
   font-family: "Inter", "Arial", "sans-serif";
   font-style: normal;
   font-weight: normal;
   font-size: 18px;
   line-height: 22px;
-  text-align: right;
+
   color: #a9a9a9;
   background-color: Transparent;
   background-repeat: no-repeat;

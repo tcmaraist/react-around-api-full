@@ -19,7 +19,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "npm run build && scp -r ./build/* tcmaraist@ty-around-the-us.students.nomoredomainssbs.ru:/home/tcmaraist/react-around-api-full/frontend"
+    "deploy": "npm run build && scp -r ./build/* tcmaraist@ty-around-the-us.students.nomoredomainssbs.ru:/home/tcmaraist/react-around-api-full/frontend-build"
   },
   "eslintConfig": {
     "extends": [
