@@ -1,8 +1,8 @@
 # react-around-api-full
 
-The API of "Around the U.S." with authorization and registration handled by the back-end server.
+End-to-end product of the "Around the U.S." project. Frontend is built with React and CSS, Backend is built with Node/Express and MongoDB.
 
-This repository contains the full API of "Around the U.S." project that features user authorization and user registration and handles cards and users. Please add to this readme:
+Hosted on Google Cloud
 
-- a link to repository with the complete React application which uses this API https://github.com/tcmaraist/react-around-api-full;
-- a link to the website that hosts this API: https://www.ty-around-the-us.students.nomoredomainssbs.ru/
+Demo project here:
+https://ty-around-the-us.students.nomoredomainssbs.ru/signin
