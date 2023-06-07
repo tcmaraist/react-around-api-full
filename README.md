@@ -1,6 +1,6 @@
 # react-around-api-full
 
-End-to-end product of the "Around the U.S." project. Frontend is built with React and CSS, Backend is built with Node/Express and MongoDB.
+End-to-end CRUD app of the "Around the U.S." project. Frontend is React and CSS, Backend is Node/Express and MongoDB.
 
 Hosted on Google Cloud.
 
